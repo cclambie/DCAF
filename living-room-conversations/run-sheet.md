@@ -5,7 +5,7 @@
 **Session Type:** Living Room Conversation  
 **Duration:** 90 minutes  
 **Participants:** 8-10 people from diverse perspectives  
-**Setting:** Community centre or cafÃ©  
+**Setting:** Community centre, Library or Cafe with quiet space and big enough for a round table
 **Facilitator:** Trained citizen facilitator (non-professional)
 
 ---
@@ -513,4 +513,89 @@
    - Invite to future sessions
 
 ---
+## Safety & Wellbeing Protocol
+
+### If Someone Discloses Harm to Themselves or Others:
+
+1. **Stay calm.**
+2. **Thank them for sharing.**
+3. **After the session**, speak with them privately.
+4. **Ask**: "Are you safe right now? Is there someone I can help you contact?"
+5. **Provide resources**: Have a list of local crisis hotlines, mental health services, domestic violence supports, etc.
+6. **Follow mandatory reporting laws** if applicable (e.g., child abuse).
+7. **Don't try to solve it yourself.** Connect them with professionals.
+
+### If the Conversation Becomes Unsafe:
+
+You have the authority to:
+- Call a break
+- Remind people of ground rules
+- Ask someone to leave if they are being harmful (rare, but possible)
+- End the session early if necessary
+
+**Your priority: the safety and dignity of all participants.**
+
+---
+
+## Additional Resources for Facilitators
+
+### For Further Learning:
+- MosaicLab's "Facilitating Deliberation" guide
+- OECD guidelines for deliberative engagement
+- Essential Partners' "Reflective Structured Dialogue" resources
+- Living Room Conversations online resource library
+
+### Self-Care for Facilitators:
+- Debrief with a co-facilitator or mentor after each session
+- Notice your own emotions and triggers
+- Take breaks between sessions
+- Celebrate small wins even a single moment of connection is a success
+
+---
+
+## Acknowledgments
+
+This run sheet is informed by deliberative democracy best practices from:
+- MosaicLab (Australia)
+- Centre for Deliberative Democracy (University of Canberra)
+- OECD Guidelines for Deliberative Engagement
+- Living Room Conversations methodology
+- Democratic Civic Access Framework (DCAF)
+
+**Prepared for:** Living Room Conversations Pilot Initiative  
+**Version:** 0.1 
+**Date:** June 2026
+
+---
+
+## Notes Section (for facilitator use during session)
+
+**What worked well:**
+
+<br>
+<br>
+
+**Challenges encountered:**
+
+<br>
+<br>
+
+**Key insights from the group:**
+
+<br>
+<br>
+
+**Ideas for next time:**
+
+<br>
+<br>
+
+**Follow-up needed:**
+
+<br>
+<br>
+
+---
+
+**Remember: You've got this. Trust yourself, trust the process, and trust the people in the room. Democracy happens in conversations like these.**
 
