@@ -78,22 +78,22 @@
 
 ## Key Reminders for Facilitators
 
-âœ… **Your job is to hold space, not to have all the answers.**
+**Your job is to hold space, not to have all the answers.**
 
-âœ… **Neutrality is your superpower.** Don't reveal your own opinions.
+**Neutrality is your superpower.** Don't reveal your own opinions.
 
-âœ… **Trust the process.** Even messy conversations can yield insights.
+**Trust the process.** Even messy conversations can yield insights.
 
-âœ… **Watch your body language.** Stay open, warm, and calm.
+**Watch your body language.** Stay open, warm, and calm.
 
-âœ… **It's okay to slow down.** Pauses are powerful.
+**It's okay to slow down.** Pauses are powerful.
 
-âœ… **Protect the quiet people.** Make space for them.
+**Protect the quiet people.** Make space for them.
 
-âœ… **Thank people often.** Gratitude builds trust.
+**Thank people often.** Gratitude builds trust.
 
-âœ… **You can't control outcomes.** You can create conditions for good conversation.
+**You can't control outcomes.** You can create conditions for good conversation.
 
-âœ… **Take care of yourself.** Facilitating is emotionally demanding. Debrief with someone afterward.
+**Take care of yourself.** Facilitating is emotionally demanding. Debrief with someone afterward.
 
 
