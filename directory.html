@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Directory — DCAF Living Room Conversations</title>
+  <meta name="description" content="Find citizen facilitators and community organisations running Living Room Conversations across Australia.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .dir-intro {
+      max-width: 680px;
+    }
+    .dir-counts {
+      display: flex; gap: 2rem; margin: 2rem 0; flex-wrap: wrap;
+    }
+    .dir-count {
+      text-align: center;
+    }
+    .dir-count .num {
+      font-size: 2.5rem; font-weight: 800; color: var(--navy);
+      letter-spacing: -0.03em; line-height: 1; display: block;
+    }
+    .dir-count span { font-size: 0.85rem; color: var(--muted); }
+
+    .join-section {
+      background: var(--soft); border-radius: var(--r); padding: 3rem;
+      margin-top: 3rem;
+    }
+    .join-form-fields {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;
+    }
+    .field {
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .field label {
+      font-size: 0.85rem; font-weight: 600; color: var(--navy);
+    }
+    .field input, .field select, .field textarea {
+      border: 1px solid var(--border); border-radius: 6px; padding: 0.65rem 0.875rem;
+      font-family: var(--font); font-size: 0.95rem; color: var(--text);
+      background: var(--white); transition: border-color 0.15s;
+      outline: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--navy);
+    }
+    .field textarea { resize: vertical; min-height: 80px; }
+    .field-full { grid-column: 1 / -1; }
+    .field-note { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+    .checkbox-group { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.4rem; }
+    .checkbox-group label {
+      display: flex; gap: 0.6rem; align-items: center;
+      font-size: 0.9rem; color: var(--muted); cursor: pointer; font-weight: 400;
+    }
+    .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+
+    @media (max-width: 600px) {
+      .join-form-fields { grid-template-columns: 1fr; }
+      .join-section { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">DC<span>AF</span></a>
+    <button class="nav-hamburger" aria-label="Open menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html#how-it-works">How It Works</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="directory.html" style="color: var(--navy); font-weight: 600;">Directory</a></li>
+      <li><a href="start-here.html">Start Here</a></li>
+      <li><a href="#join" class="nav-cta">Become a Facilitator</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <span class="label">Directory</span>
+    <h1>Citizen facilitators &amp; organisations across Australia</h1>
+    <p>Find people near you running or hosting Living Room Conversations. Add yourself to let others know you're involved.</p>
+  </div>
+</div>
+
+<!-- DIRECTORY -->
+<section>
+  <div class="container">
+
+    <div class="dir-counts">
+      <div class="dir-count">
+        <span class="num">1</span>
+        <span>Facilitators</span>
+      </div>
+      <div class="dir-count">
+        <span class="num">1</span>
+        <span>States</span>
+      </div>
+      <div class="dir-count">
+        <span class="num">0</span>
+        <span>Organisations</span>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterCards(this, 'all')">All</button>
+      <button class="filter-btn" onclick="filterCards(this, 'facilitator')">Facilitators</button>
+      <button class="filter-btn" onclick="filterCards(this, 'trainer')">Trainers</button>
+      <button class="filter-btn" onclick="filterCards(this, 'organisation')">Organisations</button>
+      <button class="filter-btn" onclick="filterCards(this, 'host')">Can Host</button>
+    </div>
+
+    <div class="directory-grid" id="directory-grid">
+
+      <!-- CARD: Craig -->
+      <div class="person-card" data-tags="facilitator trainer">
+        <div class="person-avatar">CL</div>
+        <div class="person-role">Facilitator · Trainer</div>
+        <div class="person-name">Craig L.</div>
+        <div class="person-location">📍 Brisbane, QLD</div>
+        <div class="tags">
+          <span class="tag">Political Polarisation</span>
+          <span class="tag">Can train others</span>
+          <span class="tag">Active</span>
+        </div>
+      </div>
+
+      <!-- Placeholder: you could add more cards here as they come in -->
+
+    </div>
+
+    <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
+      More facilitators joining soon. <a href="#join" style="color: var(--rust);">Add yourself to the directory ↓</a>
+    </p>
+
+  </div>
+</section>
+
+<!-- ORGANISATIONS -->
+<section style="background: var(--soft);">
+  <div class="container">
+    <span class="label">Organisations</span>
+    <h2>Groups and venues in the space</h2>
+    <p class="lead mt-2">Community organisations, venues willing to host conversations, and allied groups working on civic dialogue and democratic participation.</p>
+
+    <div class="callout mt-4" style="text-align: center; padding: 3rem;">
+      <h3>No organisations listed yet</h3>
+      <p style="margin-top: 0.5rem; margin-bottom: 1.5rem;">Is your organisation interested in hosting or supporting Living Room Conversations? Get in touch and we'll add you here.</p>
+      <a href="mailto:dcaf@craiglambie.com" class="btn btn-secondary">Get in touch →</a>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN THE DIRECTORY -->
+<section id="join">
+  <div class="container">
+    <span class="label">Add Yourself</span>
+    <h2>Join the directory</h2>
+    <p class="lead mt-2">Whether you're a trained facilitator, someone interested in learning, a researcher, or an organisation wanting to host—there's a place for you here.</p>
+
+    <div class="join-section">
+      <h3>Tell us about yourself</h3>
+      <p class="mt-1">Your email is never displayed publicly. We'll only contact you to confirm your listing or about things directly relevant to your involvement.</p>
+
+      <form
+        action="https://formsubmit.co/dcaf@craiglambie.com"
+        method="POST"
+        style="margin-top: 0;"
+      >
+        <!-- Formsubmit config -->
+        <input type="hidden" name="_subject" value="New directory listing — DCAF">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://dcaf.craiglambie.com/directory.html?joined=true">
+        <input type="text" name="_honey" style="display:none">
+
+        <div class="join-form-fields">
+          <div class="field">
+            <label for="name">Name *</label>
+            <input type="text" id="name" name="name" placeholder="First name or full name" required>
+            <span class="field-note">How you'd like to appear in the directory</span>
+          </div>
+          <div class="field">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            <span class="field-note">Not displayed publicly</span>
+          </div>
+          <div class="field">
+            <label for="location">City / Suburb *</label>
+            <input type="text" id="location" name="location" placeholder="e.g. Paddington, Brisbane" required>
+          </div>
+          <div class="field">
+            <label for="state">State *</label>
+            <select id="state" name="state" required>
+              <option value="">Select state</option>
+              <option>QLD</option>
+              <option>NSW</option>
+              <option>VIC</option>
+              <option>SA</option>
+              <option>WA</option>
+              <option>TAS</option>
+              <option>ACT</option>
+              <option>NT</option>
+            </select>
+          </div>
+          <div class="field field-full">
+            <label>I am (select all that apply) *</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" name="role" value="trained-facilitator"> A trained citizen facilitator</label>
+              <label><input type="checkbox" name="role" value="learning"> Learning to facilitate / interested in training</label>
+              <label><input type="checkbox" name="role" value="can-train"> Able to train other facilitators</label>
+              <label><input type="checkbox" name="role" value="can-host"> Able to host sessions (have a venue or community group)</label>
+              <label><input type="checkbox" name="role" value="researcher"> A researcher or academic interested in deliberative democracy</label>
+              <label><input type="checkbox" name="role" value="organisation"> Representing an organisation</label>
+            </div>
+          </div>
+          <div class="field field-full">
+            <label>Topics I'm interested in facilitating (optional)</label>
+            <div class="checkbox-group" style="flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">
+              <label><input type="checkbox" name="topics" value="political-polarisation"> Political Polarisation</label>
+              <label><input type="checkbox" name="topics" value="housing"> Housing &amp; Cost of Living</label>
+              <label><input type="checkbox" name="topics" value="climate"> Climate &amp; Energy</label>
+              <label><input type="checkbox" name="topics" value="immigration"> Immigration</label>
+              <label><input type="checkbox" name="topics" value="healthcare"> Healthcare</label>
+              <label><input type="checkbox" name="topics" value="other"> Other</label>
+            </div>
+          </div>
+          <div class="field field-full">
+            <label for="bio">A sentence or two about yourself (optional)</label>
+            <textarea id="bio" name="bio" placeholder="What brings you to this? What experience do you have? This will appear in your directory listing."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4">Add me to the directory →</button>
+      </form>
+
+      <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--muted);">
+        Listings are reviewed before being added. We'll confirm by email within a few days.
+        Rather use GitHub? <a href="https://github.com/cclambie/DCAF/discussions" style="color: var(--rust);" target="_blank" rel="noopener">Introduce yourself in Discussions.</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container-narrow text-center">
+    <span class="label">Resources</span>
+    <h2>Ready to run your first conversation?</h2>
+    <p>Everything you need—the run sheet, training guide, and facilitator notes—is free and on GitHub.</p>
+    <div class="btn-group mt-4">
+      <a href="resources.html" class="btn btn-primary">Get the Resources →</a>
+      <a href="index.html#how-it-works" class="btn btn-outline">How It Works</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo logo">DC<span style="color:#c2410c;">AF</span></a>
+        <p>Living Room Conversations—bringing people from different political perspectives together for honest, structured dialogue. Built in Australia. Built to be copied.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Programme</h4>
+        <ul>
+          <li><a href="index.html#how-it-works">How It Works</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="directory.html">Directory</a></li>
+          <li><a href="#join">Become a Facilitator</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Other Countries</h4>
+        <ul>
+          <li><a href="start-here.html">Start Here</a></li>
+          <li><a href="https://github.com/cclambie/DCAF" target="_blank" rel="noopener">Fork on GitHub</a></li>
+          <li><a href="https://github.com/cclambie/DCAF/discussions" target="_blank" rel="noopener">Discussions</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="https://github.com/cclambie/DCAF" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="mailto:dcaf@craiglambie.com">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 DCAF · Living Room Conversations Australia</span>
+      <a href="https://creativecommons.org/publicdomain/zero/1.0/" class="cc-badge" target="_blank" rel="noopener">CC0 — No rights reserved</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function filterCards(btn, tag) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.person-card').forEach(card => {
+    if (tag === 'all' || (card.dataset.tags || '').includes(tag)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// Show success message if redirected back after form submit
+if (new URLSearchParams(window.location.search).get('joined') === 'true') {
+  const msg = document.createElement('div');
+  msg.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#15803d;color:#fff;padding:1rem 2rem;border-radius:8px;font-weight:600;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.2)';
+  msg.textContent = '✓ Thanks! We\'ll review your listing and confirm by email.';
+  document.body.appendChild(msg);
+  setTimeout(() => msg.remove(), 5000);
+}
+</script>
+
+</body>
+</html>
