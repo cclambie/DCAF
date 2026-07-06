@@ -9,5 +9,17 @@
     "topics": ["political-polarisation"],
     "submitted_at": "2026-07-01T00:00:00Z",
     "approved": true
+  },
+  {
+    "id": "craig-1783341232059",
+    "name": "Craig",
+    "email": "craig@craiglambie.com",
+    "location": "Elsternwick",
+    "state": "VIC",
+    "bio": "",
+    "roles": ["can-host", "organisation"],
+    "topics": ["housing"],
+    "submitted_at": "2026-07-06T12:33:48.400Z",
+    "approved": false
   }
 ]
