@@ -16,21 +16,5 @@
     "approved": true,
     "approved_by": "craig",
     "approved_at": "2026-07-06T09:37:09.494Z"
-  },
-  {
-    "id": "zz-webhook-test-1783334656888",
-    "name": "ZZ Webhook Test",
-    "email": "claude-test@craiglambie.com",
-    "location": "Testville",
-    "state": "QLD",
-    "bio": "Automated test of the fixed submission workflow.",
-    "roles": [
-      "citizen-facilitator"
-    ],
-    "topics": [
-      "political-polarisation"
-    ],
-    "submitted_at": "2026-07-06T09:00:00Z",
-    "approved": false
   }
 ]
