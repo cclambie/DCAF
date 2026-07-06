@@ -5,9 +5,16 @@
     "location": "Brisbane, QLD",
     "state": "QLD",
     "bio": "",
-    "roles": ["citizen-facilitator", "can-train"],
-    "topics": ["political-polarisation"],
+    "roles": [
+      "citizen-facilitator",
+      "can-train"
+    ],
+    "topics": [
+      "political-polarisation"
+    ],
     "submitted_at": "2026-07-01T00:00:00Z",
-    "approved": true
+    "approved": true,
+    "approved_by": "craig",
+    "approved_at": "2026-07-06T08:24:13.684Z"
   }
 ]
