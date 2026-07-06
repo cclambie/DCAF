@@ -141,7 +141,10 @@
 
 <script>
 const N8N = 'https://n8n.craiglambie.com/webhook';
-const DIRECTORY_RAW = 'https://raw.githubusercontent.com/cclambie/DCAF/main/directory.json';
+// Read the directory from the GitHub *API* (Accept: raw) rather than raw.githubusercontent.com.
+// raw.* is CDN-cached for 5 min and ignores cache-busting query params, so a freshly
+// submitted pending entry can be invisible for minutes. The API returns it immediately.
+const DIRECTORY_API = 'https://api.github.com/repos/cclambie/DCAF/contents/directory.json';
 
 const ROLE_LABELS = {
   'citizen-facilitator': 'Citizen facilitator',
@@ -244,9 +247,25 @@ async function loadPending() {
   list.innerHTML = '';
 
   try {
-    const res     = await fetch(`${DIRECTORY_RAW}?cb=${Date.now()}`);
-    const entries = await res.json();
+    const url = `${DIRECTORY_API}?ref=main&cb=${Date.now()}`;
+    console.log('[loadPending] GET', url);
+    const res = await fetch(url, {
+      headers: { 'Accept': 'application/vnd.github.raw' },
+      cache: 'no-store',
+    });
+    console.log('[loadPending] status', res.status,
+                '| x-ratelimit-remaining:', res.headers.get('x-ratelimit-remaining'));
+
+    const raw = await res.text();
+    if (!res.ok) {
+      console.error('[loadPending] non-OK response:', raw.slice(0, 200));
+      subtitle.textContent = `Failed to load directory (HTTP ${res.status}).`;
+      return;
+    }
+
+    const entries = JSON.parse(raw);
     const pending = entries.filter(e => !e.approved);
+    console.log(`[loadPending] ${entries.length} entries, ${pending.length} pending`);
 
     if (!pending.length) {
       subtitle.textContent = 'Nothing to review right now.';
@@ -256,8 +275,9 @@ async function loadPending() {
 
     subtitle.textContent = `${pending.length} application${pending.length !== 1 ? 's' : ''} waiting for review`;
     list.innerHTML = pending.map(entryCard).join('');
-  } catch {
-    subtitle.textContent = 'Failed to load directory.';
+  } catch (err) {
+    console.error('[loadPending] failed:', err);
+    subtitle.textContent = `Failed to load directory (${err.name}: ${err.message}).`;
   }
 }
 
