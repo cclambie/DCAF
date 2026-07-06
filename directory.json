@@ -9,5 +9,17 @@
     "topics": ["political-polarisation"],
     "submitted_at": "2026-07-01T00:00:00Z",
     "approved": true
+  },
+  {
+    "id": "zz-format-test-1783341059220",
+    "name": "ZZ Format Test",
+    "email": "claude-test@craiglambie.com",
+    "location": "Testville",
+    "state": "NSW",
+    "bio": "",
+    "roles": ["citizen-facilitator", "learning"],
+    "topics": ["housing", "climate"],
+    "submitted_at": "2026-07-06T10:00:00Z",
+    "approved": false
   }
 ]
