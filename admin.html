@@ -177,13 +177,34 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   errEl.style.display = 'none';
 
   try {
+    console.log('[mod-auth] POST', `${N8N}/mod-auth`, 'username=', username);
     const res  = await fetch(`${N8N}/mod-auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, token }),
     });
-    const data = await res.json();
-    if (data.valid) {
+    console.log('[mod-auth] status', res.status, res.statusText,
+                '| content-type:', res.headers.get('content-type'),
+                '| content-length:', res.headers.get('content-length'));
+
+    // Read as text first so we can see exactly what n8n sent, even if it is empty/non-JSON.
+    const raw = await res.text();
+    console.log('[mod-auth] raw body:', JSON.stringify(raw));
+
+    let data;
+    try {
+      data = raw ? JSON.parse(raw) : null;
+    } catch (parseErr) {
+      console.error('[mod-auth] response was not valid JSON:', parseErr);
+    }
+    console.log('[mod-auth] parsed:', data);
+
+    if (data === null || data === undefined) {
+      // Empty / non-JSON response — this is the n8n "Respond to Webhook" node not returning a body.
+      errEl.textContent = `Server returned no data (HTTP ${res.status}). Check the n8n mod-auth workflow's Respond node.`;
+      errEl.style.display = '';
+    } else if (data.valid) {
+      console.log('[mod-auth] valid — entering admin');
       auth = { username, token };
       sessionStorage.setItem('dcaf-mod', JSON.stringify(auth));
       enterAdmin();
@@ -191,8 +212,9 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
       errEl.textContent = 'Invalid credentials.';
       errEl.style.display = '';
     }
-  } catch {
-    errEl.textContent = 'Could not reach the server. Check n8n is running.';
+  } catch (err) {
+    console.error('[mod-auth] fetch failed:', err);
+    errEl.textContent = `Could not reach the server (${err.name}: ${err.message}).`;
     errEl.style.display = '';
   }
 
