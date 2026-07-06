@@ -314,14 +314,35 @@ async function doAction(id, action, btn) {
   status.textContent = action === 'approve' ? 'Approving…' : 'Rejecting…';
 
   try {
+    console.log(`[mod-action] POST ${N8N}/mod-action`, { id, action });
     const res  = await fetch(`${N8N}/mod-action`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: auth.username, token: auth.token, id, action }),
     });
-    const data = await res.json();
+    console.log('[mod-action] status', res.status, res.statusText,
+                '| content-type:', res.headers.get('content-type'),
+                '| content-length:', res.headers.get('content-length'));
 
-    if (data.success) {
+    // Read as text first so an empty / non-JSON body is visible instead of throwing silently.
+    const raw = await res.text();
+    console.log('[mod-action] raw body:', JSON.stringify(raw));
+
+    let data;
+    try {
+      data = raw ? JSON.parse(raw) : null;
+    } catch (parseErr) {
+      console.error('[mod-action] response was not valid JSON:', parseErr);
+    }
+    console.log('[mod-action] parsed:', data);
+
+    if (res.status === 401) {
+      status.textContent = 'Session expired — sign in again.';
+      btns.forEach(b => b.disabled = false);
+    } else if (data === null || data === undefined) {
+      status.textContent = `No response from server (HTTP ${res.status}). Check the n8n mod-action workflow.`;
+      btns.forEach(b => b.disabled = false);
+    } else if (data.success) {
       card.classList.add(action === 'approve' ? 'is-approved' : 'is-rejected');
       status.textContent = action === 'approve' ? '✓ Approved' : '✕ Rejected';
       setTimeout(() => {
@@ -333,8 +354,9 @@ async function doAction(id, action, btn) {
       status.textContent = data.error || 'Something went wrong.';
       btns.forEach(b => b.disabled = false);
     }
-  } catch {
-    status.textContent = 'Request failed. Try again.';
+  } catch (err) {
+    console.error('[mod-action] fetch failed:', err);
+    status.textContent = `Request failed (${err.name}: ${err.message}).`;
     btns.forEach(b => b.disabled = false);
   }
 }
