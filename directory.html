@@ -91,15 +91,15 @@
 
     <div class="dir-counts">
       <div class="dir-count">
-        <span class="num">1</span>
+        <span class="num" id="count-facilitators">—</span>
         <span>Facilitators</span>
       </div>
       <div class="dir-count">
-        <span class="num">1</span>
+        <span class="num" id="count-states">—</span>
         <span>States</span>
       </div>
       <div class="dir-count">
-        <span class="num">0</span>
+        <span class="num" id="count-orgs">—</span>
         <span>Organisations</span>
       </div>
     </div>
@@ -107,30 +107,13 @@
     <!-- Filters -->
     <div class="filters">
       <button class="filter-btn active" onclick="filterCards(this, 'all')">All</button>
-      <button class="filter-btn" onclick="filterCards(this, 'facilitator')">Facilitators</button>
-      <button class="filter-btn" onclick="filterCards(this, 'trainer')">Trainers</button>
+      <button class="filter-btn" onclick="filterCards(this, 'citizen-facilitator')">Facilitators</button>
+      <button class="filter-btn" onclick="filterCards(this, 'can-train')">Trainers</button>
       <button class="filter-btn" onclick="filterCards(this, 'organisation')">Organisations</button>
-      <button class="filter-btn" onclick="filterCards(this, 'host')">Can Host</button>
+      <button class="filter-btn" onclick="filterCards(this, 'can-host')">Can Host</button>
     </div>
 
-    <div class="directory-grid" id="directory-grid">
-
-      <!-- CARD: Craig -->
-      <div class="person-card" data-tags="facilitator trainer">
-        <div class="person-avatar">CL</div>
-        <div class="person-role">Facilitator · Trainer</div>
-        <div class="person-name">Craig L.</div>
-        <div class="person-location">📍 Melbourne, Vic</div>
-        <div class="tags">
-          <span class="tag">Political Polarisation</span>
-          <span class="tag">Can train others</span>
-          <span class="tag">Active</span>
-        </div>
-      </div>
-
-      <!-- Placeholder: you could add more cards here as they come in -->
-
-    </div>
+    <div class="directory-grid" id="directory-grid"></div>
 
     <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
       More facilitators joining soon. <a href="#join" style="color: var(--rust);">Add yourself to the directory ↓</a>
@@ -165,16 +148,7 @@
       <h3>Tell us about yourself</h3>
       <p class="mt-1">Your email is never displayed publicly. We'll only contact you to confirm your listing or about things directly relevant to your involvement.</p>
 
-      <form
-        action="https://formsubmit.co/dcaf@craiglambie.com"
-        method="POST"
-        style="margin-top: 0;"
-      >
-        <!-- Formsubmit config -->
-        <input type="hidden" name="_subject" value="New directory listing — DCAF">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://dcaf.craiglambie.com/directory.html?joined=true">
-        <input type="text" name="_honey" style="display:none">
+      <form id="directory-form" style="margin-top: 0;">
 
         <div class="join-form-fields">
           <div class="field">
@@ -233,7 +207,8 @@
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-4">Add me to the directory →</button>
+        <button type="submit" id="form-submit-btn" class="btn btn-primary mt-4">Add me to the directory →</button>
+        <p id="form-error" style="display:none; margin-top:1rem; color:#b91c1c; font-size:0.9rem;"></p>
       </form>
 
       <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--muted);">
@@ -295,27 +270,71 @@
   </div>
 </footer>
 
+<script src="js/directory.js"></script>
 <script>
 function filterCards(btn, tag) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.person-card').forEach(card => {
-    if (tag === 'all' || (card.dataset.tags || '').includes(tag)) {
-      card.style.display = '';
-    } else {
-      card.style.display = 'none';
-    }
+    const hidden = tag !== 'all' && !(card.dataset.tags || '').includes(tag);
+    card.style.display = hidden ? 'none' : '';
   });
 }
 
-// Show success message if redirected back after form submit
-if (new URLSearchParams(window.location.search).get('joined') === 'true') {
-  const msg = document.createElement('div');
-  msg.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#15803d;color:#fff;padding:1rem 2rem;border-radius:8px;font-weight:600;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.2)';
-  msg.textContent = '✓ Thanks! We\'ll review your listing and confirm by email.';
-  document.body.appendChild(msg);
-  setTimeout(() => msg.remove(), 5000);
-}
+loadDirectory('directory-grid', {
+  onLoad(approved) {
+    const facilitators = approved.filter(p => (p.roles || []).includes('citizen-facilitator')).length;
+    const states = new Set(approved.map(p => p.state).filter(Boolean)).size;
+    const orgs = approved.filter(p => (p.roles || []).includes('organisation')).length;
+    document.getElementById('count-facilitators').textContent = facilitators;
+    document.getElementById('count-states').textContent = states;
+    document.getElementById('count-orgs').textContent = orgs;
+  },
+});
+
+document.getElementById('directory-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('form-submit-btn');
+  const errEl = document.getElementById('form-error');
+
+  const roles = [...form.querySelectorAll('input[name="role"]:checked')].map(el => el.value);
+  if (roles.length === 0) {
+    errEl.textContent = 'Please select at least one option for "I am".';
+    errEl.style.display = '';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  errEl.style.display = 'none';
+
+  const payload = {
+    name: form.name.value.trim(),
+    email: form.email.value.trim(),
+    location: form.location.value.trim(),
+    state: form.state.value,
+    bio: form.bio.value.trim(),
+    roles,
+    topics: [...form.querySelectorAll('input[name="topics"]:checked')].map(el => el.value),
+    submitted_at: new Date().toISOString(),
+  };
+
+  try {
+    const res = await fetch('https://n8n.craiglambie.com/webhook/43158f46-f3ab-480c-8748-e08a94ce858b', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error('Server error');
+    form.innerHTML = '<p style="font-size:1.05rem; color:#15803d; font-weight:600; padding: 1.5rem 0;">Thanks! We\'ll review your listing and confirm by email within a few days.</p>';
+  } catch {
+    btn.disabled = false;
+    btn.textContent = 'Add me to the directory →';
+    errEl.textContent = 'Something went wrong. Please try again or email dcaf@craiglambie.com.';
+    errEl.style.display = '';
+  }
+});
 </script>
 
 </body>

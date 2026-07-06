@@ -260,32 +260,7 @@
     <h2>Citizen facilitators across Australia</h2>
     <p class="lead mt-2">Join the directory to connect with other facilitators, find people near you, or let communities know you're available to run or host a conversation.</p>
 
-    <div class="directory-grid">
-      <div class="person-card">
-        <div class="person-avatar">CL</div>
-        <div class="person-role">Facilitator · Trainer</div>
-        <div class="person-name">Craig L.</div>
-        <div class="person-location">📍 Brisbane, QLD</div>
-        <div class="tags">
-          <span class="tag">Political Polarisation</span>
-          <span class="tag">Can train others</span>
-        </div>
-      </div>
-      <div class="person-card" style="opacity: 0.45; border-style: dashed;">
-        <div class="person-avatar" style="background: var(--muted);">?</div>
-        <div class="person-role">Facilitator</div>
-        <div class="person-name">Your name here</div>
-        <div class="person-location">📍 Your city</div>
-        <div class="tags"><span class="tag">Add yourself →</span></div>
-      </div>
-      <div class="person-card" style="opacity: 0.45; border-style: dashed;">
-        <div class="person-avatar" style="background: var(--muted);">?</div>
-        <div class="person-role">Facilitator</div>
-        <div class="person-name">Your name here</div>
-        <div class="person-location">📍 Your city</div>
-        <div class="tags"><span class="tag">Add yourself →</span></div>
-      </div>
-    </div>
+    <div class="directory-grid" id="index-directory-grid"></div>
 
     <div class="btn-group">
       <a href="directory.html" class="btn btn-secondary">Browse the full directory</a>
@@ -346,5 +321,9 @@
   </div>
 </footer>
 
+<script src="js/directory.js"></script>
+<script>
+loadDirectory('index-directory-grid', { limit: 3, placeholders: 3 });
+</script>
 </body>
 </html>

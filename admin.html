@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moderation — DCAF Directory</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: var(--soft); }
+
+    /* ── Login ── */
+    .login-wrap {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    .login-card {
+      background: var(--white); border-radius: var(--r); padding: 2.5rem;
+      width: 100%; max-width: 400px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .login-card h2 { margin-bottom: 0.25rem; }
+    .login-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .login-card .field { margin-bottom: 1rem; }
+    .login-card .field label {
+      display: block; font-size: 0.85rem; font-weight: 600;
+      color: var(--navy); margin-bottom: 0.35rem;
+    }
+    .login-card input {
+      width: 100%; border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.65rem 0.875rem; font-family: var(--font); font-size: 0.95rem;
+      color: var(--text); background: var(--white); outline: none; box-sizing: border-box;
+    }
+    .login-card input:focus { border-color: var(--navy); }
+    .login-error { color: #b91c1c; font-size: 0.875rem; margin-top: 0.75rem; display: none; }
+
+    /* ── Admin layout ── */
+    #admin-section { display: none; }
+    .admin-header {
+      background: var(--navy); color: var(--white); padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .admin-header .brand { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em; }
+    .admin-header .brand span { color: var(--rust); }
+    .admin-meta { font-size: 0.85rem; color: rgba(255,255,255,0.6); display: flex; gap: 1.5rem; align-items: center; }
+    .admin-meta strong { color: rgba(255,255,255,0.9); }
+    .signout-btn {
+      background: none; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.7);
+      border-radius: 6px; padding: 0.35rem 0.75rem; font-size: 0.8rem; cursor: pointer;
+      font-family: var(--font);
+    }
+    .signout-btn:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
+
+    .admin-body { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .admin-body h2 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .admin-body .subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+    /* ── Pending cards ── */
+    .pending-list { display: flex; flex-direction: column; gap: 1.25rem; }
+    .pending-card {
+      background: var(--white); border-radius: var(--r); padding: 1.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid var(--amber);
+    }
+    .pending-card.is-approved { border-left-color: #15803d; opacity: 0.6; pointer-events: none; }
+    .pending-card.is-rejected { border-left-color: #b91c1c; opacity: 0.6; pointer-events: none; }
+
+    .pending-top {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .pending-name { font-size: 1.2rem; font-weight: 700; color: var(--navy); }
+    .pending-email { font-size: 0.875rem; color: var(--rust); margin-top: 0.15rem; }
+    .pending-location { font-size: 0.875rem; color: var(--muted); margin-top: 0.1rem; }
+    .pending-submitted { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+
+    .pending-body { margin-top: 1rem; display: grid; gap: 0.75rem; }
+    .pending-field label {
+      font-size: 0.75rem; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 0.2rem;
+    }
+    .pending-field .value { font-size: 0.9rem; color: var(--text); }
+    .pending-field .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.2rem; }
+
+    .pending-actions {
+      margin-top: 1.25rem; padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex; gap: 0.75rem; align-items: center;
+    }
+    .action-status { font-size: 0.875rem; color: var(--muted); }
+
+    .empty-state {
+      text-align: center; padding: 4rem 2rem; color: var(--muted);
+      background: var(--white); border-radius: var(--r);
+    }
+    .empty-state h3 { margin-bottom: 0.5rem; }
+
+    @media (max-width: 600px) {
+      .admin-header { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+      .pending-top { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div class="login-wrap" id="login-section">
+  <div class="login-card">
+    <a href="index.html" class="nav-logo" style="display:inline-block;margin-bottom:1.5rem;">DC<span>AF</span></a>
+    <h2>Moderator access</h2>
+    <p>Directory moderation. Enter your username and access token.</p>
+    <form id="login-form">
+      <div class="field">
+        <label for="mod-username">Username</label>
+        <input type="text" id="mod-username" autocomplete="username" placeholder="your-username" required>
+      </div>
+      <div class="field">
+        <label for="mod-token">Access token</label>
+        <input type="password" id="mod-token" autocomplete="current-password" placeholder="github_pat_…" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem;" id="login-btn">
+        Sign in →
+      </button>
+      <p class="login-error" id="login-error"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ── ADMIN ── -->
+<div id="admin-section">
+  <div class="admin-header">
+    <div class="brand">DC<span>AF</span> <span style="font-weight:400;color:rgba(255,255,255,0.5);font-size:0.9rem;">/ moderation</span></div>
+    <div class="admin-meta">
+      <span>Signed in as <strong id="admin-username-display"></strong></span>
+      <button class="signout-btn" onclick="signOut()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+    <h2>Pending applications</h2>
+    <p class="subtitle" id="pending-subtitle">Loading…</p>
+    <div class="pending-list" id="pending-list"></div>
+  </div>
+</div>
+
+<script>
+const N8N = 'https://n8n.craiglambie.com/webhook';
+const DIRECTORY_RAW = 'https://raw.githubusercontent.com/cclambie/DCAF/main/directory.json';
+
+const ROLE_LABELS = {
+  'citizen-facilitator': 'Citizen facilitator',
+  'learning': 'Learning to facilitate',
+  'can-train': 'Can train others',
+  'can-host': 'Can host sessions',
+  'researcher': 'Researcher / academic',
+  'organisation': 'Organisation',
+};
+const TOPIC_LABELS = {
+  'political-polarisation': 'Political Polarisation',
+  'housing': 'Housing & Cost of Living',
+  'climate': 'Climate & Energy',
+  'immigration': 'Immigration',
+  'healthcare': 'Healthcare',
+  'other': 'Other',
+};
+
+// ── Auth state ──────────────────────────────────────────────
+let auth = null;
+try { auth = JSON.parse(sessionStorage.getItem('dcaf-mod')); } catch {}
+
+// ── Login ───────────────────────────────────────────────────
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const username = document.getElementById('mod-username').value.trim();
+  const token    = document.getElementById('mod-token').value.trim();
+  const btn      = document.getElementById('login-btn');
+  const errEl    = document.getElementById('login-error');
+
+  btn.disabled = true;
+  btn.textContent = 'Checking…';
+  errEl.style.display = 'none';
+
+  try {
+    const res  = await fetch(`${N8N}/mod-auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, token }),
+    });
+    const data = await res.json();
+    if (data.valid) {
+      auth = { username, token };
+      sessionStorage.setItem('dcaf-mod', JSON.stringify(auth));
+      enterAdmin();
+    } else {
+      errEl.textContent = 'Invalid credentials.';
+      errEl.style.display = '';
+    }
+  } catch {
+    errEl.textContent = 'Could not reach the server. Check n8n is running.';
+    errEl.style.display = '';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Sign in →';
+});
+
+function signOut() {
+  sessionStorage.removeItem('dcaf-mod');
+  auth = null;
+  document.getElementById('admin-section').style.display = 'none';
+  document.getElementById('login-section').style.display = '';
+}
+
+// ── Admin UI ────────────────────────────────────────────────
+function enterAdmin() {
+  document.getElementById('login-section').style.display  = 'none';
+  document.getElementById('admin-section').style.display  = '';
+  document.getElementById('admin-username-display').textContent = auth.username;
+  loadPending();
+}
+
+async function loadPending() {
+  const subtitle = document.getElementById('pending-subtitle');
+  const list     = document.getElementById('pending-list');
+  subtitle.textContent = 'Loading…';
+  list.innerHTML = '';
+
+  try {
+    const res     = await fetch(`${DIRECTORY_RAW}?cb=${Date.now()}`);
+    const entries = await res.json();
+    const pending = entries.filter(e => !e.approved);
+
+    if (!pending.length) {
+      subtitle.textContent = 'Nothing to review right now.';
+      list.innerHTML = `<div class="empty-state"><h3>All clear</h3><p>No pending applications.</p></div>`;
+      return;
+    }
+
+    subtitle.textContent = `${pending.length} application${pending.length !== 1 ? 's' : ''} waiting for review`;
+    list.innerHTML = pending.map(entryCard).join('');
+  } catch {
+    subtitle.textContent = 'Failed to load directory.';
+  }
+}
+
+function entryCard(e) {
+  const roleLabels  = (e.roles  || []).map(r => ROLE_LABELS[r]  || r);
+  const topicLabels = (e.topics || []).map(t => TOPIC_LABELS[t] || t);
+  const submitted   = e.submitted_at
+    ? new Date(e.submitted_at).toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short' })
+    : '—';
+
+  return `
+  <div class="pending-card" id="card-${e.id}">
+    <div class="pending-top">
+      <div>
+        <div class="pending-name">${esc(e.name)}</div>
+        <div class="pending-email">${esc(e.email || '')}</div>
+        <div class="pending-location">📍 ${esc(e.location)}, ${esc(e.state)}</div>
+      </div>
+      <div class="pending-submitted">Submitted ${submitted}</div>
+    </div>
+    <div class="pending-body">
+      ${roleLabels.length ? `
+      <div class="pending-field">
+        <label>Roles</label>
+        <div class="tags">${roleLabels.map(l => `<span class="tag">${esc(l)}</span>`).join('')}</div>
+      </div>` : ''}
+      ${topicLabels.length ? `
+      <div class="pending-field">
+        <label>Topics</label>
+        <div class="tags">${topicLabels.map(l => `<span class="tag">${esc(l)}</span>`).join('')}</div>
+      </div>` : ''}
+      ${e.bio ? `
+      <div class="pending-field">
+        <label>Bio</label>
+        <div class="value">${esc(e.bio)}</div>
+      </div>` : ''}
+    </div>
+    <div class="pending-actions">
+      <button class="btn btn-primary" style="background:#15803d;border-color:#15803d;"
+        onclick="doAction('${esc(e.id)}', 'approve', this)">Approve</button>
+      <button class="btn btn-secondary" style="color:#b91c1c;border-color:#b91c1c;"
+        onclick="doAction('${esc(e.id)}', 'reject', this)">Reject</button>
+      <span class="action-status" id="status-${esc(e.id)}"></span>
+    </div>
+  </div>`;
+}
+
+async function doAction(id, action, btn) {
+  const card   = document.getElementById(`card-${id}`);
+  const status = document.getElementById(`status-${id}`);
+  const btns   = card.querySelectorAll('button');
+
+  btns.forEach(b => b.disabled = true);
+  status.textContent = action === 'approve' ? 'Approving…' : 'Rejecting…';
+
+  try {
+    const res  = await fetch(`${N8N}/mod-action`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: auth.username, token: auth.token, id, action }),
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      card.classList.add(action === 'approve' ? 'is-approved' : 'is-rejected');
+      status.textContent = action === 'approve' ? '✓ Approved' : '✕ Rejected';
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.3s';
+        card.style.opacity = '0';
+        setTimeout(() => card.remove(), 320);
+      }, 800);
+    } else {
+      status.textContent = data.error || 'Something went wrong.';
+      btns.forEach(b => b.disabled = false);
+    }
+  } catch {
+    status.textContent = 'Request failed. Try again.';
+    btns.forEach(b => b.disabled = false);
+  }
+}
+
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Resume session ───────────────────────────────────────────
+if (auth) enterAdmin();
+</script>
+
+</body>
+</html>
