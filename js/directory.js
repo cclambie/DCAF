@@ -1,5 +1,6 @@
 const ROLE_LABELS = {
-  'citizen-facilitator': 'Facilitator',
+  'citizen-facilitator': 'Citizen Facilitator',
+  'professional-facilitator': 'Professional Facilitator',
   'learning': 'Learning',
   'can-train': 'Trainer',
   'can-host': 'Can Host',

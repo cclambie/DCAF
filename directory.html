@@ -107,7 +107,7 @@
     <!-- Filters -->
     <div class="filters">
       <button class="filter-btn active" onclick="filterCards(this, 'all')">All</button>
-      <button class="filter-btn" onclick="filterCards(this, 'citizen-facilitator')">Facilitators</button>
+      <button class="filter-btn" onclick="filterCards(this, 'facilitator')">Facilitators</button>
       <button class="filter-btn" onclick="filterCards(this, 'can-train')">Trainers</button>
       <button class="filter-btn" onclick="filterCards(this, 'organisation')">Organisations</button>
       <button class="filter-btn" onclick="filterCards(this, 'can-host')">Can Host</button>
@@ -183,6 +183,7 @@
             <label>I am (select all that apply) *</label>
             <div class="checkbox-group">
               <label><input type="checkbox" name="role" value="citizen-facilitator"> A citizen facilitator</label>
+              <label><input type="checkbox" name="role" value="professional-facilitator"> A professional facilitator (facilitation is part of your work)</label>
               <label><input type="checkbox" name="role" value="learning"> Learning to facilitate / interested in training</label>
               <label><input type="checkbox" name="role" value="can-train"> Able to train other facilitators</label>
               <label><input type="checkbox" name="role" value="can-host"> Able to host sessions (have a venue or community group)</label>
@@ -283,7 +284,7 @@ function filterCards(btn, tag) {
 
 loadDirectory('directory-grid', {
   onLoad(approved) {
-    const facilitators = approved.filter(p => (p.roles || []).includes('citizen-facilitator')).length;
+    const facilitators = approved.filter(p => (p.roles || []).some(r => r === 'citizen-facilitator' || r === 'professional-facilitator')).length;
     const states = new Set(approved.map(p => p.state).filter(Boolean)).size;
     const orgs = approved.filter(p => (p.roles || []).includes('organisation')).length;
     document.getElementById('count-facilitators').textContent = facilitators;
