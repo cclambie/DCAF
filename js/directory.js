@@ -55,10 +55,13 @@ async function loadDirectory(gridId, opts) {
 
   let approved = [];
   try {
-    const res = await fetch('directory.json');
+    // Cache-bust + no-store so moderation edits appear without waiting for a stale cached copy.
+    const res = await fetch(`directory.json?cb=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const all = await res.json();
     approved = all.filter(p => p.approved);
-  } catch {
+  } catch (err) {
+    console.error('[loadDirectory] failed to load directory.json:', err);
     return;
   }
 
