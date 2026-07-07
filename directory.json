@@ -34,6 +34,8 @@
     "roles": ["professional-facilitator", "can-train"],
     "topics": ["climate"],
     "submitted_at": "2026-07-07T00:00:00Z",
-    "approved": false
+    "approved": true,
+    "approved_by": "craig",
+    "approved_at": "2026-07-07T02:01:52.615Z"
   }
 ]
