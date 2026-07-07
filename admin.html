@@ -235,7 +235,9 @@ function signOut() {
 // ── Admin UI ────────────────────────────────────────────────
 function enterAdmin() {
   document.getElementById('login-section').style.display  = 'none';
-  document.getElementById('admin-section').style.display  = '';
+  // Must be an explicit value: the stylesheet has `#admin-section { display: none }`,
+  // so setting inline display to '' would fall back to that and stay hidden.
+  document.getElementById('admin-section').style.display  = 'block';
   document.getElementById('admin-username-display').textContent = auth.username;
   loadPending();
 }
