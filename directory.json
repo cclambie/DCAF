@@ -20,6 +20,8 @@
     "roles": ["can-host", "organisation"],
     "topics": ["housing"],
     "submitted_at": "2026-07-06T12:33:48.400Z",
-    "approved": false
+    "approved": true,
+    "approved_by": "craig",
+    "approved_at": "2026-07-07T00:13:44.237Z"
   }
 ]
